@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: content">
+<body>
+<section>
+    <div class="encabezado-hu">
+        <h1>HU1 – Administrar clientes (CRUD)</h1>
+        <a th:href="@{/clientes/nuevo}" class="btn btn-primary">+ Nuevo cliente</a>
+    </div>
+
+    <div class="tabla-wrapper">
+        <table class="tabla-hu">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cédula</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${clientes}">
+                <td th:text="${c.id}">1</td>
+                <td th:text="${c.cedula}">10101010</td>
+                <td th:text="${c.nombre}">Juan</td>
+                <td th:text="${c.apellidos}">Pérez</td>
+                <td th:text="${c.correo}">correo@ejemplo.com</td>
+                <td th:text="${c.telefono}">88888888</td>
+                <td th:text="${c.direccion}">Santa Cruz</td>
+                <td>
+                    <a th:href="@{'/clientes/editar/' + ${c.id}}" class="link">Editar</a> |
+                    <a th:href="@{'/clientes/eliminar/' + ${c.id}}" class="link link-danger"
+                       onclick="return confirm('¿Eliminar cliente?')">Eliminar</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(clientes)}">
+                <td colspan="8" class="vacio">No hay clientes registrados.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: content">
+<body>
+<section>
+    <div class="encabezado-hu">
+        <h1>HU2 – Registrar y gestionar solicitudes de reparación</h1>
+        <a th:href="@{/tickets/nuevo}" class="btn btn-primary">+ Nuevo ticket</a>
+    </div>
+
+    <div class="tabla-wrapper">
+        <table class="tabla-hu">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Folio</th>
+                <th>Cliente</th>
+                <th>Equipo</th>
+                <th>Falla reportada</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="t : ${tickets}">
+                <td th:text="${t.id}">1</td>
+                <td th:text="${t.folio}">T-001</td>
+                <td th:text="${t.clienteNombre}">Carlos</td>
+                <td>
+                    <span th:text="${t.tipoEquipo}"></span>
+                    <span th:text="${t.marcaModelo}"></span>
+                </td>
+                <td th:text="${t.fallaReportada}"></td>
+                <td>
+                    <span class="badge" th:text="${t.estado}">Recibido</span>
+                </td>
+                <td>
+                    <a th:href="@{'/tickets/editar/' + ${t.id}}" class="link">Editar</a> |
+                    <a th:href="@{'/tickets/eliminar/' + ${t.id}}" class="link link-danger"
+                       onclick="return confirm('¿Eliminar ticket?')">Eliminar</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(tickets)}">
+                <td colspan="7" class="vacio">No hay tickets registrados.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

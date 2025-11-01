@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: content">
+<body>
+<section class="form-card">
+    <h1 th:text="${titulo}">Ticket</h1>
+
+    <div th:if="${errorMensaje}" class="alerta alerta-error" th:text="${errorMensaje}"></div>
+
+    <form th:action="@{/tickets/guardar}" th:object="${ticket}" method="post" class="formulario">
+        <input type="hidden" name="modoEdicion" th:value="${modoEdicion}">
+        <div class="grupo">
+            <label>Folio</label>
+            <input type="text" th:field="*{folio}" placeholder="Ej: T-0001" required>
+        </div>
+        <div class="grupo">
+            <label>Nombre del cliente</label>
+            <input type="text" th:field="*{clienteNombre}">
+        </div>
+        <div class="grupo">
+            <label>Tipo de equipo</label>
+            <input type="text" th:field="*{tipoEquipo}" placeholder="Laptop, Celular, Impresora...">
+        </div>
+        <div class="grupo">
+            <label>Marca / Modelo / Serie</label>
+            <input type="text" th:field="*{marcaModelo}">
+        </div>
+        <div class="grupo">
+            <label>Falla reportada</label>
+            <textarea th:field="*{fallaReportada}" rows="2"></textarea>
+        </div>
+        <div class="grupo">
+            <label>Accesorios recibidos</label>
+            <input type="text" th:field="*{accesoriosRecibidos}" placeholder="Cargador, funda, batería...">
+        </div>
+        <div class="grupo">
+            <label>Estado</label>
+            <select th:field="*{estado}">
+                <option value="Recibido">Recibido</option>
+                <option value="Diagnóstico">Diagnóstico</option>
+                <option value="Presupuesto">Presupuesto</option>
+                <option value="Reparación">Reparación</option>
+                <option value="Listo">Listo</option>
+                <option value="Entregado">Entregado</option>
+                <option value="Cancelado">Cancelado</option>
+            </select>
+        </div>
+        <div class="acciones">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a th:href="@{/tickets}" class="btn btn-secundario">Cancelar</a>
+        </div>
+    </form>
+</section>
+</body>
+</html>

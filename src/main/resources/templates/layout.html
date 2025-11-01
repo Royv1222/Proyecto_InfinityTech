@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titulo} ?: 'Proyecto Infinity'">Proyecto Infinity</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="logo">Proyecto Infinity</div>
+    <nav class="menu">
+        <a th:href="@{/}">Inicio</a>
+        <a th:href="@{/clientes}">HU1 - Clientes</a>
+        <a th:href="@{/tickets}">HU2 - Tickets</a>
+        <span class="menu-extra">+ HU3 ... HU20</span>
+    </nav>
+</header>
+
+<main class="contenedor">
+    <div th:insert="~{::content}"></div>
+</main>
+
+<footer class="footer">
+    Proyecto Infinity – ejemplo académico
+</footer>
+</body>
+</html>

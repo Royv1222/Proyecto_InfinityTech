@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Consumir Repuesto</title>
+</head>
+<body>
+    <h1>Consumir Repuesto</h1>
+    <form th:action="@{/api/repuesto/consumir}" method="post">
+        <label for="codigo">Código del repuesto:</label>
+        <input type="text" id="codigo" name="codigo" required><br><br>
+
+        <label for="ticketAprobado">Ticket aprobado:</label>
+        <input type="checkbox" id="ticketAprobado" name="ticketAprobado" value="true"><br><br>
+
+        <button type="submit">Consumir</button>
+    </form>
+</body>
+</html>

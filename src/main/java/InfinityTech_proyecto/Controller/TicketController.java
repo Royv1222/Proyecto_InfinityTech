@@ -39,7 +39,7 @@ public class TicketController {
 
     @PostMapping("/tickets/guardar")
     public String guardarTicket(Ticket ticket, BindingResult result, Model model,
-                                @RequestParam(name = "modoEdicion", required = false) String modoEdicion) {
+            @RequestParam(name = "modoEdicion", required = false) String modoEdicion) {
 
         if (ticket.getFolio() == null || ticket.getFolio().trim().isEmpty()) {
             model.addAttribute("errorMensaje", "El folio es obligatorio");
@@ -71,4 +71,150 @@ public class TicketController {
         ticketService.eliminar(id);
         return "redirect:/tickets";
     }
+
+    @GetMapping("/tickets/{id}/cambiar-estado")
+    public String viewCambiarEstado(@PathVariable Long id, Model model) {
+        Ticket ticket = ticketService.buscarPorId(id);
+        model.addAttribute("ticket", ticket);
+        model.addAttribute("titulo", "Cambiar estado");
+        return "cambiar_estado";
+    }
+
+    @PostMapping("/tickets/{id}/estado")
+    public String postCambiarEstado(@PathVariable Long id,
+            @RequestParam("nuevo") String nuevo,
+            Model model) {
+        Ticket t = ticketService.buscarPorId(id);
+
+        if (!transicionValida(t.getEstado(), nuevo)) {
+            model.addAttribute("ticket", t);
+            model.addAttribute("errorMensaje", "Transición de estado no permitida");
+            model.addAttribute("titulo", "Cambiar estado");
+            return "cambiar_estado";
+        }
+
+        t.setEstado(nuevo);
+        ticketService.guardar(t);
+
+        model.addAttribute("okMensaje", "Estado actualizado a " + nuevo);
+        return "redirect:/tickets/editar/" + id;
+    }
+
+    private boolean transicionValida(String actual, String nuevo) {
+        actual = actual == null ? "" : actual;
+        switch (actual) {
+            case "Recibido":
+            case "Diagnóstico":
+            case "Presupuesto":
+                return nuevo.equals("Reparación");
+            case "Reparación":
+                return nuevo.equals("Listo");
+            case "Listo":
+                return false;
+            default:
+                return false;
+        }
+    }
+
+    @GetMapping("/tickets/{id}/notificar-estado")
+    public String viewNotificarEstado(@PathVariable Long id, Model model) {
+        Ticket ticket = ticketService.buscarPorId(id);
+        model.addAttribute("ticket", ticket);
+        model.addAttribute("titulo", "Notificar estado");
+        return "notificar_estado";
+    }
+
+    @PostMapping("/tickets/{id}/notificar")
+    public String postNotificarEstado(@PathVariable Long id, Model model) {
+        Ticket t = ticketService.buscarPorId(id);
+
+        if (!"Listo".equals(t.getEstado())) {
+            model.addAttribute("ticket", t);
+            model.addAttribute("errorMensaje", "Solo se notifica automáticamente cuando el estado es 'Listo'.");
+            model.addAttribute("titulo", "Notificar estado");
+            return "notificar_estado";
+        }
+
+        model.addAttribute("okMensaje", "Notificación disparada al cliente.");
+        return "redirect:/tickets/editar/" + id;
+    }
+
+    @GetMapping("/tickets/{id}/registrar-entrega")
+    public String viewRegistrarEntrega(@PathVariable Long id, Model model) {
+        Ticket ticket = ticketService.buscarPorId(id);
+        model.addAttribute("ticket", ticket);
+        model.addAttribute("titulo", "Registrar entrega");
+        return "registrar_entrega";
+    }
+
+    @PostMapping("/tickets/{id}/entregar")
+    public String postRegistrarEntrega(@PathVariable Long id,
+            @RequestParam("numeroFactura") String numeroFactura,
+            Model model) {
+        Ticket t = ticketService.buscarPorId(id);
+
+        if (!"Listo".equals(t.getEstado())) {
+            model.addAttribute("ticket", t);
+            model.addAttribute("errorMensaje", "Solo se puede entregar si el estado es 'Listo'.");
+            model.addAttribute("titulo", "Registrar entrega");
+            return "registrar_entrega";
+        }
+
+        t.setEstado("Entregado");
+        ticketService.guardar(t);
+
+        return "redirect:/tickets/editar/" + id;
+    }
+
+    @GetMapping("/tickets/{id}/gestionar-garantia")
+    public String viewGestionarGarantia(@PathVariable Long id, Model model) {
+        Ticket ticket = ticketService.buscarPorId(id);
+        model.addAttribute("ticket", ticket);
+
+        boolean enGarantia = estaEnGarantia(ticket);
+        int diasRestantes = diasRestantesGarantia(ticket);
+
+        model.addAttribute("enGarantia", enGarantia);
+        model.addAttribute("diasRestantesGarantia", diasRestantes);
+        model.addAttribute("titulo", "Gestionar garantía");
+        return "gestionar_garantia";
+    }
+
+    @PostMapping("/tickets/{id}/garantia")
+    public String postCrearGarantia(@PathVariable Long id,
+            @RequestParam(name = "fallaReportada", required = false) String fallaReportada,
+            Model model) {
+        Ticket original = ticketService.buscarPorId(id);
+
+        if (!estaEnGarantia(original)) {
+            model.addAttribute("ticket", original);
+            model.addAttribute("enGarantia", false);
+            model.addAttribute("errorMensaje", "La garantía ha expirado.");
+            model.addAttribute("titulo", "Gestionar garantía");
+            return "gestionar_garantia";
+        }
+
+        Ticket g = new Ticket();
+        g.setFolio(original.getFolio() + "-G");
+        g.setEstado("Recibido");
+        g.setClienteNombre(original.getClienteNombre());
+        g.setTipoEquipo(original.getTipoEquipo());
+        g.setMarcaModelo(original.getMarcaModelo());
+        g.setFallaReportada((fallaReportada == null || fallaReportada.isBlank())
+                ? "Garantía de ticket " + original.getFolio()
+                : fallaReportada);
+
+        ticketService.guardar(g);
+
+        return "redirect:/tickets/editar/" + g.getId();
+    }
+
+    private boolean estaEnGarantia(Ticket t) {
+        return "Entregado".equals(t.getEstado());
+    }
+
+    private int diasRestantesGarantia(Ticket t) {
+        return "Entregado".equals(t.getEstado()) ? 90 : 0;
+    }
+
 }

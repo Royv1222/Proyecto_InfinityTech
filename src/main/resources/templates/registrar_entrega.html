@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: content">
+<section class="form-card">
+    <h1>Registrar entrega</h1>
+
+    <div th:if="${errorMensaje}" class="alerta alerta-error" th:text="${errorMensaje}"></div>
+    <div th:if="${okMensaje}" class="alerta alerta-exito" th:text="${okMensaje}"></div>
+
+    <form th:action="@{'/tickets/' + ${ticket.id} + '/entregar'}" method="post">
+        <div class="grupo">
+            <label>Número de factura:</label>
+            <input type="text" name="numeroFactura" placeholder="Ej: F-00123" required/>
+        </div>
+
+        <div class="grupo">
+            <label>Confirmar identidad del cliente:</label>
+            <input type="text" name="nombreCliente" placeholder="Nombre del cliente" required/>
+        </div>
+
+        <div class="acciones">
+            <button class="btn btn-primario" type="submit">Registrar entrega</button>
+            <a th:href="@{/tickets}" class="btn btn-secundario">Cancelar</a>
+        </div>
+    </form>
+
+    <small class="nota">Solo se puede entregar si el estado del ticket es “Listo para retiro”.</small>
+</section>
+</html>

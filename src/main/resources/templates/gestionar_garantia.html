@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: content">
+<section class="form-card">
+    <h1>Gestionar garantía</h1>
+
+    <div th:if="${errorMensaje}" class="alerta alerta-error" th:text="${errorMensaje}"></div>
+    <div th:if="${okMensaje}" class="alerta alerta-exito" th:text="${okMensaje}"></div>
+
+    <div class="grupo">
+        <label>Ticket original:</label>
+        <input type="text" th:value="${ticket.folio}" readonly/>
+    </div>
+
+    <div class="grupo" th:if="${enGarantia}">
+        <p>El equipo se encuentra dentro del período de garantía (<span th:text="${diasRestantesGarantia}"></span> días restantes).</p>
+        <form th:action="@{'/tickets/' + ${ticket.id} + '/garantia'}" method="post">
+            <label>Descripción de la falla:</label>
+            <textarea name="fallaReportada" rows="3" placeholder="Describa la falla relacionada..."></textarea>
+            <button class="btn btn-primario" type="submit">Crear ticket de garantía</button>
+        </form>
+    </div>
+
+    <div th:if="${enGarantia == false}">
+        <p class="alerta alerta-error">La garantía ha expirado.</p>
+    </div>
+
+    <a th:href="@{/tickets}" class="btn btn-secundario">Volver</a>
+</section>
+</html>

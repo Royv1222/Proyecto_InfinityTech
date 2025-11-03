@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: content">
+<section class="form-card">
+    <h1>Notificar cliente</h1>
+
+    <div th:if="${okMensaje}" class="alerta alerta-exito" th:text="${okMensaje}"></div>
+    <div th:if="${errorMensaje}" class="alerta alerta-error" th:text="${errorMensaje}"></div>
+
+    <div class="grupo">
+        <label>Ticket:</label>
+        <input type="text" th:value="${ticket.folio}" readonly/>
+    </div>
+
+    <div class="grupo">
+        <label>Estado actual:</label>
+        <input type="text" th:value="${ticket.estado}" readonly/>
+    </div>
+
+    <form th:action="@{'/tickets/' + ${ticket.id} + '/notificar'}" method="post">
+        <button class="btn btn-primario" type="submit">Enviar notificación</button>
+        <a th:href="@{/tickets}" class="btn btn-secundario">Volver</a>
+    </form>
+
+    <small class="nota">Cuando el estado sea “Listo para retiro”, el sistema enviará automáticamente la notificación.</small>
+</section>
+</html>

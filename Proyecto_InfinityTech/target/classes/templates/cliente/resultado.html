@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Resultado', ~{::section})}">
+<section>
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Resultado del folio</h1>
+      <p class="page-subtitle">Información del ticket.</p>
+    </div>
+    <a class="btn" th:href="@{/cliente/consultar}">Nueva consulta</a>
+  </div>
+
+  <div class="card">
+    <div class="grid grid-2">
+      <div>
+        <div class="label">Folio</div>
+        <div><b th:text="${ticket.folio}">000</b></div>
+      </div>
+      <div>
+        <div class="label">Estado</div>
+        <span class="badge"><span class="dot"></span> <span th:text="${ticket.estado}"></span></span>
+      </div>
+      <div>
+        <div class="label">Equipo</div>
+        <div th:text="${ticket.equipo}"></div>
+      </div>
+      <div>
+        <div class="label">Técnico</div>
+        <div th:text="${ticket.tecnicoAsignado != null ? ticket.tecnicoAsignado : 'Sin asignar'}"></div>
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <div>
+      <div class="label">Diagnóstico</div>
+      <div class="muted" th:text="${ticket.diagnostico != null ? ticket.diagnostico : 'Aún no hay diagnóstico.'}"></div>
+    </div>
+
+    <hr class="divider"/>
+
+    <div>
+      <div class="label">Presupuesto</div>
+      <div th:text="${ticket.presupuesto != null ? ('₡ ' + ticket.presupuesto) : 'Pendiente'}"></div>
+    </div>
+  </div>
+</section>
+</html>

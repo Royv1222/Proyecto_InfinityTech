@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Repuestos (Técnico)', ~{::section})}">
+<section>
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Catálogo de repuestos</h1>
+      <p class="page-subtitle">Solicitar resta stock / Devolver suma stock.</p>
+    </div>
+    <a class="btn" th:href="@{/tecnico/tickets}">Volver a tickets</a>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">Crear repuesto (rápido)</h2>
+    <form class="form" th:action="@{/tecnico/repuestos/crear}" method="post">
+      <div class="row">
+        <div>
+          <div class="label">Nombre</div>
+          <input class="input" name="nombre" placeholder="Ej: RAM DDR4 8GB" />
+        </div>
+        <div>
+          <div class="label">Stock</div>
+          <input class="input" name="stock" type="number" min="0" value="0" />
+        </div>
+      </div>
+      <button class="btn btn-primary" type="submit">Guardar</button>
+    </form>
+  </div>
+
+  <div style="height:14px"></div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Repuesto</th>
+          <th>Stock</th>
+          <th>Solicitar</th>
+          <th>Devolver</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="r : ${repuestos}">
+          <td><b th:text="${r.nombre}">RAM</b></td>
+          <td th:text="${r.stock}">0</td>
+
+          <td>
+            <form class="row" style="gap:8px" th:action="@{/tecnico/repuestos/{id}/solicitar(id=${r.id})}" method="post">
+              <input class="input" style="max-width:120px" name="cantidad" type="number" min="1" value="1"/>
+              <button class="btn btn-sm btn-primary" type="submit">Solicitar</button>
+            </form>
+          </td>
+
+          <td>
+            <form class="row" style="gap:8px" th:action="@{/tecnico/repuestos/{id}/devolver(id=${r.id})}" method="post">
+              <input class="input" style="max-width:120px" name="cantidad" type="number" min="1" value="1"/>
+              <button class="btn btn-sm" type="submit">Devolver</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</html>

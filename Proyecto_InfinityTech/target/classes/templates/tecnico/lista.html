@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Tickets (Técnico)', ~{::section})}">
+<section>
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Tickets</h1>
+      <p class="page-subtitle">Abrí un ticket para registrar diagnóstico y presupuesto.</p>
+    </div>
+    <a class="btn" th:href="@{/tecnico/repuestos}">Ver repuestos</a>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Folio</th>
+          <th>Cliente</th>
+          <th>Equipo</th>
+          <th>Estado</th>
+          <th>Presupuesto</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="t : ${tickets}">
+          <td><b th:text="${t.folio}">000</b></td>
+          <td th:text="${t.clienteNombre}"></td>
+          <td th:text="${t.equipo}"></td>
+          <td>
+            <span class="badge"><span class="dot"></span> <span th:text="${t.estado}"></span></span>
+          </td>
+          <td th:text="${t.presupuesto != null ? ('₡ ' + t.presupuesto) : '-'}"></td>
+          <td>
+            <a class="btn btn-sm btn-primary" th:href="@{/tecnico/tickets/{id}(id=${t.id})}">Abrir</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</html>

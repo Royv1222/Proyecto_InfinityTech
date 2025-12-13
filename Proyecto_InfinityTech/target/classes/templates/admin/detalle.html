@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Detalle ticket (Admin)', ~{::section})}">
+<section>
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Admin - Ticket <span class="muted">#</span><span th:text="${ticket.folio}"></span></h1>
+      <p class="page-subtitle">Gestión completa.</p>
+    </div>
+    <a class="btn" th:href="@{/admin/tickets}">Volver</a>
+  </div>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <h2 class="card-title">Información</h2>
+      <p class="muted small">Cliente: <b th:text="${ticket.clienteNombre}"></b></p>
+      <p class="muted small">Equipo: <b th:text="${ticket.equipo}"></b></p>
+      <p class="muted small">Estado: <b th:text="${ticket.estado}"></b></p>
+      <p class="muted small">Técnico: <b th:text="${ticket.tecnicoAsignado != null ? ticket.tecnicoAsignado : '-'}"></b></p>
+      <p class="muted small">Presupuesto: <b th:text="${ticket.presupuesto != null ? ('₡ ' + ticket.presupuesto) : '-'}"></b></p>
+      <hr class="divider"/>
+      <div class="label">Problema</div>
+      <div class="muted" th:text="${ticket.problema}"></div>
+      <hr class="divider"/>
+      <div class="label">Diagnóstico</div>
+      <div class="muted" th:text="${ticket.diagnostico != null ? ticket.diagnostico : 'Sin diagnóstico'}"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Acciones</h2>
+
+      <form class="form" th:action="@{/admin/tickets/{id}/asignar(id=${ticket.id})}" method="post">
+        <div class="label">Asignar técnico</div>
+        <input class="input" name="tecnico" placeholder="Nombre del técnico" />
+        <button class="btn btn-primary" type="submit">Asignar</button>
+      </form>
+
+      <hr class="divider"/>
+
+      <form class="form" th:action="@{/admin/tickets/{id}/estado(id=${ticket.id})}" method="post">
+        <div class="label">Cambiar estado</div>
+        <select class="select" name="estado">
+          <option th:each="e: ${estados}" th:value="${e}" th:text="${e}"></option>
+        </select>
+        <button class="btn" type="submit">Actualizar</button>
+      </form>
+
+      <hr class="divider"/>
+
+      <form th:action="@{/admin/tickets/{id}/eliminar(id=${ticket.id})}" method="post">
+        <button class="btn btn-danger w-100" type="submit">Eliminar ticket</button>
+      </form>
+    </div>
+  </div>
+</section>
+</html>

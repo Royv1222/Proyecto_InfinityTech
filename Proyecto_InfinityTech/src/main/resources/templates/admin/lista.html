@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Tickets (Admin)', ~{::section})}">
+<section>
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Tickets (Admin)</h1>
+      <p class="page-subtitle">Asignar técnico, cambiar estado y eliminar.</p>
+    </div>
+    <a class="btn" th:href="@{/admin/repuestos}">Repuestos</a>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Folio</th>
+          <th>Cliente</th>
+          <th>Equipo</th>
+          <th>Estado</th>
+          <th>Técnico</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="t : ${tickets}">
+          <td><b th:text="${t.folio}"></b></td>
+          <td th:text="${t.clienteNombre}"></td>
+          <td th:text="${t.equipo}"></td>
+          <td><span class="badge"><span class="dot"></span> <span th:text="${t.estado}"></span></span></td>
+          <td th:text="${t.tecnicoAsignado != null ? t.tecnicoAsignado : '-'}"></td>
+          <td>
+            <a class="btn btn-sm btn-primary" th:href="@{/admin/tickets/{id}(id=${t.id})}">Abrir</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(title, content)">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title th:text="${title}">InfinityTech</title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css}" />
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" th:href="@{/login}">
+      <span class="brand-dot"></span>
+      <span class="brand-text">InfinityTech <span class="muted">Repair</span></span>
+    </a>
+
+    <nav class="nav-links">
+      <!-- Cliente -->
+      <a th:if="${session.rol != null and session.rol.name() == 'CLIENTE'}" th:href="@{/cliente}">Inicio</a>
+      <a th:if="${session.rol != null and session.rol.name() == 'CLIENTE'}" th:href="@{/cliente/solicitar}">Solicitar</a>
+      <a th:if="${session.rol != null and session.rol.name() == 'CLIENTE'}" th:href="@{/cliente/consultar}">Consultar folio</a>
+
+      <!-- Técnico -->
+      <a th:if="${session.rol != null and session.rol.name() == 'TECNICO'}" th:href="@{/tecnico/tickets}">Tickets</a>
+      <a th:if="${session.rol != null and session.rol.name() == 'TECNICO'}" th:href="@{/tecnico/repuestos}">Repuestos</a>
+
+      <!-- Admin -->
+      <a th:if="${session.rol != null and session.rol.name() == 'ADMIN'}" th:href="@{/admin/tickets}">Tickets</a>
+      <a th:if="${session.rol != null and session.rol.name() == 'ADMIN'}" th:href="@{/admin/repuestos}">Repuestos</a>
+
+      <span th:if="${session.usuario != null}" class="badge">
+        <span class="dot"></span>
+        <span th:text="${session.usuario}">usuario</span>
+      </span>
+
+      <a th:if="${session.rol != null}" class="btn btn-sm btn-ghost" th:href="@{/logout}">Salir</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div th:replace="${content}"></div>
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="muted">© InfinityTech - Reparación de computadoras</div>
+    <div class="muted small">(Cliente / Técnico / Admin)</div>
+  </div>
+</footer>
+
+</body>
+</html>

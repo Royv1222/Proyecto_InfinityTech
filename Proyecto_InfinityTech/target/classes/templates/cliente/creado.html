@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Ticket creado', ~{::section})}">
+<section>
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Ticket creado</h1>
+      <p class="page-subtitle">Guardá tu folio para consultar.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="alert alert-success">
+      Tu folio es: <b th:text="${ticket.folio}">000</b>
+    </div>
+
+    <div class="grid grid-2">
+      <div>
+        <div class="label">Equipo</div>
+        <div th:text="${ticket.equipo}"></div>
+      </div>
+      <div>
+        <div class="label">Estado</div>
+        <span class="badge"><span class="dot"></span> <span th:text="${ticket.estado}"></span></span>
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <div class="card-actions">
+      <a class="btn btn-primary" th:href="@{/cliente/consultar(folio=${ticket.folio})}">Consultar ahora</a>
+      <a class="btn" th:href="@{/cliente}">Ir al inicio</a>
+    </div>
+  </div>
+</section>
+</html>

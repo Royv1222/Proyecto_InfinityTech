@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Login', ~{::section})}">
+<section>
+  <div class="auth-page">
+    <div class="auth-card">
+      <h1 class="auth-title">Iniciar sesión</h1>
+      <p class="auth-subtitle">Ingrese usuario e ingresá con clave.</p>
+
+      <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+      <form class="form" th:action="@{/login}" method="post" th:object="${loginForm}">
+        <div>
+          <div class="label">Usuario</div>
+          <input class="input" th:field="*{usuario}" placeholder="admin / tecnico / cliente" />
+        </div>
+
+        <div>
+          <div class="label">Contraseña</div>
+          <input class="input" type="password" th:field="*{password}" placeholder="123" />
+        </div>
+
+        <button class="btn btn-primary w-100" type="submit">Entrar</button>
+      </form>
+
+      <hr class="divider"/>
+
+      <div class="public-links muted">
+        <span class="badge"><span class="dot"></span> admin / tecnico / cualquier nombre = cliente</span>
+      </div>
+    </div>
+  </div>
+</section>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Solicitar servicio', ~{::section})}">
+<section>
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Solicitar servicio</h1>
+      <p class="page-subtitle">Ingresá el equipo y el problema.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <form class="form" th:action="@{/cliente/solicitar}" method="post" th:object="${ticketForm}">
+      <div>
+        <div class="label">Equipo</div>
+        <input class="input" th:field="*{equipo}" placeholder="Ej: Laptop HP / PC gamer / iMac" />
+      </div>
+
+      <div>
+        <div class="label">Descripción del problema</div>
+        <textarea class="textarea" th:field="*{problema}" placeholder="Ej: no enciende, pantalla azul, lento, etc."></textarea>
+      </div>
+
+      <button class="btn btn-primary" type="submit">Crear ticket</button>
+      <a class="btn btn-ghost" th:href="@{/cliente}">Volver</a>
+    </form>
+  </div>
+</section>
+</html>
